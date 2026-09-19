@@ -1,0 +1,78 @@
+nohup: ignoring input
+[ 1/54] mode=proactive advInterval=2  seed=1 ... PDR 99.4822%  ctrl 3011
+[ 2/54] mode=proactive advInterval=2  seed=2 ... PDR 93.2891%  ctrl 2845
+[ 3/54] mode=proactive advInterval=2  seed=3 ... PDR 90.0384%  ctrl 2560
+[ 4/54] mode=proactive advInterval=5  seed=1 ... PDR 98.175%  ctrl 1201
+[ 5/54] mode=proactive advInterval=5  seed=2 ... PDR 97.3668%  ctrl 1149
+[ 6/54] mode=proactive advInterval=5  seed=3 ... PDR 91.2423%  ctrl 1019
+[ 7/54] mode=proactive advInterval=10 seed=1 ... PDR 99.3329%  ctrl 613
+[ 8/54] mode=proactive advInterval=10 seed=2 ... PDR 94.0183%  ctrl 571
+[ 9/54] mode=proactive advInterval=10 seed=3 ... PDR 93.7971%  ctrl 516
+[10/54] mode=proactive advInterval=20 seed=1 ... PDR 99.754%  ctrl 306
+[11/54] mode=proactive advInterval=20 seed=2 ... PDR 99.6443%  ctrl 286
+[12/54] mode=proactive advInterval=20 seed=3 ... PDR 97.9131%  ctrl 246
+[13/54] mode=proactive advInterval=40 seed=1 ... PDR 90.8587%  ctrl 148
+[14/54] mode=proactive advInterval=40 seed=2 ... PDR 99.1131%  ctrl 157
+[15/54] mode=proactive advInterval=40 seed=3 ... PDR 97.2174%  ctrl 120
+[16/54] mode=proactive advInterval=60 seed=1 ... PDR 99.6429%  ctrl 126
+[17/54] mode=proactive advInterval=60 seed=2 ... PDR 99.3567%  ctrl 109
+[18/54] mode=proactive advInterval=60 seed=3 ... PDR 99.1392%  ctrl 92
+[19/54] mode=reactive  advInterval=2  seed=1 ... PDR 91.8749%  ctrl 1329
+[20/54] mode=reactive  advInterval=2  seed=2 ... PDR 96.4511%  ctrl 1162
+[21/54] mode=reactive  advInterval=2  seed=3 ... PDR 87.0925%  ctrl 1722
+[22/54] mode=reactive  advInterval=5  seed=1 ... PDR 91.8749%  ctrl 1329
+[23/54] mode=reactive  advInterval=5  seed=2 ... PDR 96.4511%  ctrl 1162
+[24/54] mode=reactive  advInterval=5  seed=3 ... PDR 87.0925%  ctrl 1722
+[25/54] mode=reactive  advInterval=10 seed=1 ... PDR 91.8749%  ctrl 1329
+[26/54] mode=reactive  advInterval=10 seed=2 ... PDR 96.4511%  ctrl 1162
+[27/54] mode=reactive  advInterval=10 seed=3 ... PDR 87.0925%  ctrl 1722
+[28/54] mode=reactive  advInterval=20 seed=1 ... PDR 91.8749%  ctrl 1329
+[29/54] mode=reactive  advInterval=20 seed=2 ... PDR 96.4511%  ctrl 1162
+[30/54] mode=reactive  advInterval=20 seed=3 ... PDR 87.0925%  ctrl 1722
+[31/54] mode=reactive  advInterval=40 seed=1 ... PDR 91.8749%  ctrl 1329
+[32/54] mode=reactive  advInterval=40 seed=2 ... PDR 96.4511%  ctrl 1162
+[33/54] mode=reactive  advInterval=40 seed=3 ... PDR 87.0925%  ctrl 1722
+[34/54] mode=reactive  advInterval=60 seed=1 ... PDR 91.8749%  ctrl 1329
+[35/54] mode=reactive  advInterval=60 seed=2 ... PDR 96.4511%  ctrl 1162
+[36/54] mode=reactive  advInterval=60 seed=3 ... PDR 87.0925%  ctrl 1722
+[37/54] mode=hybrid    advInterval=2  seed=1 ... PDR 92.0132%  ctrl 1588
+[38/54] mode=hybrid    advInterval=2  seed=2 ... PDR 97.4933%  ctrl 1701
+[39/54] mode=hybrid    advInterval=2  seed=3 ... PDR 89.4299%  ctrl 1571
+[40/54] mode=hybrid    advInterval=5  seed=1 ... PDR 96.0687%  ctrl 682
+[41/54] mode=hybrid    advInterval=5  seed=2 ... PDR 97.3275%  ctrl 722
+[42/54] mode=hybrid    advInterval=5  seed=3 ... PDR 91.3396%  ctrl 837
+[43/54] mode=hybrid    advInterval=10 seed=1 ... PDR 92.0374%  ctrl 812
+[44/54] mode=hybrid    advInterval=10 seed=2 ... PDR 98.1355%  ctrl 400
+[45/54] mode=hybrid    advInterval=10 seed=3 ... PDR 94.2869%  ctrl 736
+[46/54] mode=hybrid    advInterval=20 seed=1 ... PDR 87.4948%  ctrl 1157
+[47/54] mode=hybrid    advInterval=20 seed=2 ... PDR 89.5432%  ctrl 1178
+[48/54] mode=hybrid    advInterval=20 seed=3 ... PDR 87.8358%  ctrl 1957
+[49/54] mode=hybrid    advInterval=40 seed=1 ... PDR 96.475%  ctrl 1337
+[50/54] mode=hybrid    advInterval=40 seed=2 ... PDR 93.0189%  ctrl 1153
+[51/54] mode=hybrid    advInterval=40 seed=3 ... PDR 93.684%  ctrl 1274
+[52/54] mode=hybrid    advInterval=60 seed=1 ... PDR 98.6804%  ctrl 1143
+[53/54] mode=hybrid    advInterval=60 seed=2 ... PDR 97.7592%  ctrl 1054
+[54/54] mode=hybrid    advInterval=60 seed=3 ... PDR 94.495%  ctrl 1274
+
+Done. Wrote /home/rafi/ns3work-sync/results.csv
+
+Means by mode and advertisement interval:
+hybrid         2    92.98     11.261     1620.0
+hybrid         5    94.91      6.507      747.0
+hybrid        10    94.82      5.786      649.3
+hybrid        20    88.29      7.060     1430.7
+hybrid        40    94.39      7.545     1254.7
+hybrid        60    96.98      7.592     1157.0
+mode         adv     PDR%   delay_ms    control
+proactive      2    94.27      6.762     2805.3
+proactive      5    95.59      7.723     1123.0
+proactive     10    95.72      6.662      566.7
+proactive     20    99.10     10.052      279.3
+proactive     40    95.73     10.310      141.7
+proactive     60    99.38      9.861      109.0
+reactive       2    91.81      8.754     1404.3
+reactive       5    91.81      8.754     1404.3
+reactive      10    91.81      8.754     1404.3
+reactive      20    91.81      8.754     1404.3
+reactive      40    91.81      8.754     1404.3
+reactive      60    91.81      8.754     1404.3
