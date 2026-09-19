@@ -22,7 +22,7 @@
 set -u
 
 NS3DIR=~/ns-allinone-3.48/ns-3.48
-SHARED=/mnt/hgfs/ns3work
+SHARED=~/ns3work-sync
 OUT=$SHARED/results.csv
 SCRATCH=$(mktemp -d)
 
