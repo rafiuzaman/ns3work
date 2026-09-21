@@ -40,12 +40,14 @@
 #include "ns3/flow-monitor-module.h"
 #include "ns3/internet-module.h"
 #include "ns3/mobility-module.h"
+#include "ns3/netanim-module.h"
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/wifi-module.h"
 
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <set>
 #include <sstream>
 #include <string>
@@ -886,7 +888,14 @@ main(int argc, char* argv[])
     uint32_t numGateways = 2;
     uint32_t numSources = 5;
     double simTime = 200.0;
-    double areaSize = 750.0; // the operating point the baseline sweep identified
+    double areaSize = 750.0;   // field width (m)
+    // Field height. Left at zero the field is square, which is the common case.
+    // A separate height is needed because the established scenario for fifteen
+    // nodes in this line of work -- and in Hamidian's original study -- is
+    // 800 x 500 m, not a square. Forcing it square would make the field 60%
+    // larger and the network correspondingly sparser, which is not the same
+    // experiment.
+    double areaHeight = 0.0;
     double range = 250.0;
     double nodeSpeedMin = 1.0;
     double nodeSpeedMax = 6.0;
@@ -900,6 +909,7 @@ main(int argc, char* argv[])
     std::string mode = "proactive";
     bool maliciousGw = false;
     double dropFraction = 1.0; // a malicious gateway drops everything by default
+    bool enableAnim = false;   // NetAnim tracing is slow and verbose; opt in with --anim=1
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("mode", "Discovery mechanism: proactive | reactive | hybrid", mode);
@@ -907,14 +917,36 @@ main(int argc, char* argv[])
     cmd.AddValue("numGateways", "Number of gateways", numGateways);
     cmd.AddValue("numSources", "How many MANET nodes generate CBR traffic", numSources);
     cmd.AddValue("simTime", "Simulation time (s)", simTime);
-    cmd.AddValue("areaSize", "Side length of the square area (m)", areaSize);
+    cmd.AddValue("areaSize", "Width of the simulation area (m)", areaSize);
+    cmd.AddValue("areaHeight", "Height of the simulation area (m; 0 = square)", areaHeight);
     cmd.AddValue("range", "WiFi transmission range (m)", range);
     cmd.AddValue("advInterval", "Advertisement interval (s)", advIntervalSec);
     cmd.AddValue("advZone", "Advertisement zone radius in hops (hybrid mode)", advZone);
     cmd.AddValue("maliciousGw", "Make gateway 1 accept traffic then discard it", maliciousGw);
     cmd.AddValue("dropFraction", "Fraction of relayed traffic a malicious gateway drops",
                  dropFraction);
+    cmd.AddValue("anim", "Write a NetAnim trace file (slow; use short simTime)", enableAnim);
+    // Exposed so that the interaction between advertisement interval and entry
+    // lifetime can be measured rather than assumed: a node can only transmit
+    // while it holds an unexpired gateway entry, so when advInterval exceeds
+    // entryLifetime the achievable send rate falls to entryLifetime/advInterval.
+    cmd.AddValue("entryLifetime", "How long a gateway table entry stays valid (s)",
+                 entryLifetimeSec);
+    // Node speed and pause time are the conventional independent variables in
+    // this line of work and must therefore be settable from the command line.
+    cmd.AddValue("nodeSpeedMin", "Minimum mobile node speed (m/s)", nodeSpeedMin);
+    cmd.AddValue("nodeSpeedMax", "Maximum mobile node speed (m/s)", nodeSpeedMax);
+    cmd.AddValue("pauseTime", "Random waypoint pause time (s)", pauseTime);
+    cmd.AddValue("packetSize", "CBR payload size (bytes)", packetSize);
+    cmd.AddValue("cbrRate", "CBR packets per second per source", cbrRatePps);
     cmd.Parse(argc, argv);
+
+    // A height of zero means "square", so that every existing invocation that
+    // passes only --areaSize keeps behaving exactly as it did before.
+    if (areaHeight <= 0.0)
+    {
+        areaHeight = areaSize;
+    }
 
     if (mode == "reactive")
     {
@@ -930,11 +962,15 @@ main(int argc, char* argv[])
         mode = "proactive";
     }
 
-    NS_LOG_UNCOND("Gateway Discovery: mode=" << mode << ", area " << areaSize << "x" << areaSize
+    NS_LOG_UNCOND("Gateway Discovery: mode=" << mode << ", area " << areaSize << "x" << areaHeight
                                              << " m, range " << range << " m, " << numManetNodes
                                              << " nodes, " << numGateways << " gateways, "
                                              << numSources << " sources, advInterval "
-                                             << advIntervalSec << " s"
+                                             << advIntervalSec << " s, entryLifetime "
+                                             << entryLifetimeSec << " s, speed " << nodeSpeedMin
+                                             << "-" << nodeSpeedMax << " m/s, pause " << pauseTime
+                                             << " s, simTime " << simTime << " s, RngRun "
+                                             << RngSeedManager::GetRun()
                                              << (maliciousGw ? ", MALICIOUS gw1" : ""));
 
     NodeContainer manetNodes;
@@ -978,7 +1014,7 @@ main(int argc, char* argv[])
     posX->SetAttribute("Max", DoubleValue(areaSize));
     Ptr<UniformRandomVariable> posY = CreateObject<UniformRandomVariable>();
     posY->SetAttribute("Min", DoubleValue(0.0));
-    posY->SetAttribute("Max", DoubleValue(areaSize));
+    posY->SetAttribute("Max", DoubleValue(areaHeight));
     Ptr<RandomRectanglePositionAllocator> initialAlloc =
         CreateObject<RandomRectanglePositionAllocator>();
     initialAlloc->SetAttribute("X", PointerValue(posX));
@@ -989,7 +1025,7 @@ main(int argc, char* argv[])
     wpX->SetAttribute("Max", DoubleValue(areaSize));
     Ptr<UniformRandomVariable> wpY = CreateObject<UniformRandomVariable>();
     wpY->SetAttribute("Min", DoubleValue(0.0));
-    wpY->SetAttribute("Max", DoubleValue(areaSize));
+    wpY->SetAttribute("Max", DoubleValue(areaHeight));
     Ptr<RandomRectanglePositionAllocator> wpAlloc =
         CreateObject<RandomRectanglePositionAllocator>();
     wpAlloc->SetAttribute("X", PointerValue(wpX));
@@ -1017,7 +1053,7 @@ main(int argc, char* argv[])
     {
         double x = (numGateways == 1) ? areaSize / 2.0
                                       : (areaSize * i) / (numGateways - 1);
-        gwPos->Add(Vector(x, areaSize / 2.0, 0.0));
+        gwPos->Add(Vector(x, areaHeight / 2.0, 0.0));
     }
     gwMobility.SetPositionAllocator(gwPos);
     gwMobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
@@ -1025,7 +1061,7 @@ main(int argc, char* argv[])
 
     MobilityHelper netMobility;
     Ptr<ListPositionAllocator> netPos = CreateObject<ListPositionAllocator>();
-    netPos->Add(Vector(areaSize / 2.0, areaSize + 100.0, 0.0));
+    netPos->Add(Vector(areaSize / 2.0, areaHeight + 100.0, 0.0));
     netMobility.SetPositionAllocator(netPos);
     netMobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
     netMobility.Install(internetNode);
@@ -1176,21 +1212,118 @@ main(int argc, char* argv[])
     sink->SetStartTime(Seconds(0.0));
     sink->SetStopTime(Seconds(simTime));
 
+    // ---- NetAnim visualisation ----
+    //
+    // Off by default. AnimationInterface logs every packet transmission, which
+    // both slows the run down substantially and produces very large XML files,
+    // so it is opt-in and intended for short runs made purely to produce a
+    // figure or an animation -- not for the measurement runs that feed the
+    // results tables.
+    //
+    // Nodes are labelled and coloured to match the conventions used in the
+    // paper's architecture figure: MANET nodes MN1..MNn, Internet gateways
+    // IGW1..IGWm, and the wired correspondent node. CBR sources are given a
+    // distinct colour so that the traffic-generating nodes can be picked out,
+    // and a gateway running in malicious mode is drawn in red.
+    //
+    //   ./ns3 run "scratch/gateway-discovery --mode=hybrid --simTime=30 --anim=1"
+    //
+    std::unique_ptr<AnimationInterface> anim;
+    if (enableAnim)
+    {
+        std::ostringstream animFile;
+        animFile << "gateway-discovery-" << mode << ".xml";
+        anim = std::make_unique<AnimationInterface>(animFile.str());
+        anim->SetMaxPktsPerTraceFile(500000);
+
+        // MANET nodes: sources in green, non-sources in blue.
+        for (uint32_t i = 0; i < numManetNodes; ++i)
+        {
+            uint32_t id = manetNodes.Get(i)->GetId();
+            std::ostringstream name;
+            name << "MN" << (i + 1);
+            anim->UpdateNodeDescription(id, name.str());
+            anim->UpdateNodeSize(id, std::min(areaSize, areaHeight) / 40.0,
+                                 std::min(areaSize, areaHeight) / 40.0);
+            if (i < actualSources)
+            {
+                anim->UpdateNodeColor(id, 0, 170, 0); // active source
+            }
+            else
+            {
+                anim->UpdateNodeColor(id, 90, 140, 235); // ordinary mobile node
+            }
+        }
+
+        // Gateways: orange, drawn larger. A malicious gateway is shown in red.
+        for (uint32_t i = 0; i < numGateways; ++i)
+        {
+            uint32_t id = gatewayNodes.Get(i)->GetId();
+            std::ostringstream name;
+            name << "IGW" << (i + 1);
+            anim->UpdateNodeDescription(id, name.str());
+            anim->UpdateNodeSize(id, std::min(areaSize, areaHeight) / 25.0,
+                                 std::min(areaSize, areaHeight) / 25.0);
+            if (maliciousGw && i == 1)
+            {
+                anim->UpdateNodeColor(id, 220, 0, 0); // malicious gateway
+            }
+            else
+            {
+                anim->UpdateNodeColor(id, 255, 140, 0);
+            }
+        }
+
+        // The wired correspondent node on the far side of the gateways.
+        uint32_t netId = internetNode.Get(0)->GetId();
+        anim->UpdateNodeDescription(netId, "Internet");
+        anim->UpdateNodeSize(netId, std::min(areaSize, areaHeight) / 25.0,
+                                    std::min(areaSize, areaHeight) / 25.0);
+        anim->UpdateNodeColor(netId, 130, 60, 200);
+
+        NS_LOG_UNCOND("NetAnim trace will be written to " << animFile.str());
+    }
+
     Simulator::Stop(Seconds(simTime));
     Simulator::Run();
 
     // ---- Results ----
-    double pdr =
+    //
+    // Two delivery ratios are reported, and the distinction matters.
+    //
+    // A node that has no unexpired gateway entry when its CBR timer fires
+    // cannot transmit at all: in proactive mode it has no way to ask for a
+    // gateway, so the packet is simply never sent. Those attempts are counted
+    // in noGatewayAtSendTime.
+    //
+    // Dividing received by *sent* therefore silently removes every such
+    // failure from the denominator, and reports near-perfect delivery for a
+    // configuration that is in fact delivering a fraction of the offered load.
+    // The Packet Delivery Ratio below is consequently computed against the
+    // offered load -- every packet the application intended to transmit --
+    // which is the quantity the metric is conventionally understood to mean.
+    //
+    // The transmitted-only figure is retained as a secondary diagnostic,
+    // because the gap between the two is itself informative: it isolates
+    // discovery failure from network loss.
+    uint64_t attempted = g_stats.dataSent + g_stats.noGatewayAtSendTime;
+
+    double pdr = (attempted > 0) ? (100.0 * g_stats.dataReceived / attempted) : 0.0;
+    double txPdr =
         (g_stats.dataSent > 0) ? (100.0 * g_stats.dataReceived / g_stats.dataSent) : 0.0;
+    double sendRate = (attempted > 0) ? (100.0 * g_stats.dataSent / attempted) : 0.0;
     double avgDelay = (g_stats.dataReceived > 0)
                           ? (g_stats.delaySum.GetSeconds() / g_stats.dataReceived)
                           : 0.0;
 
     NS_LOG_UNCOND("\n---- Gateway Discovery Results (" << mode << ") ----");
+    NS_LOG_UNCOND("Data packets offered:   " << attempted);
     NS_LOG_UNCOND("Data packets sent:      " << g_stats.dataSent);
     NS_LOG_UNCOND("Data packets relayed:   " << g_stats.dataRelayed);
     NS_LOG_UNCOND("Data packets received:  " << g_stats.dataReceived);
     NS_LOG_UNCOND("Packet Delivery Ratio:  " << pdr << " %");
+    NS_LOG_UNCOND("Transmitted-only PDR:   " << txPdr << " %");
+    NS_LOG_UNCOND("Gateway availability:   " << sendRate << " %");
     NS_LOG_UNCOND("Average End-to-End Delay: " << avgDelay << " s");
     NS_LOG_UNCOND("Sends with no gateway known: " << g_stats.noGatewayAtSendTime);
     if (maliciousGw)
@@ -1214,6 +1347,69 @@ main(int argc, char* argv[])
         NS_LOG_UNCOND("  gateway " << i << " (" << gw << ")"
                                    << (maliciousGw && i == 1 ? " [MALICIOUS]" : "")
                                    << ": " << n << " packets delivered");
+    }
+
+    // ---- Machine-readable summary ----
+    //
+    // A single tagged line carrying every parameter and every result, so that
+    // sweep scripts can extract one line per run instead of grepping a dozen
+    // separate labels. Every run is therefore self-describing: the CSV records
+    // the conditions that produced it, which removes any possibility of a
+    // results file being interpreted against the wrong parameter set.
+    {
+        uint64_t gwDelivered0 = 0;
+        uint64_t gwDelivered1 = 0;
+        if (numGateways > 0)
+        {
+            Ipv4Address a = wifiInterfaces.GetAddress(numManetNodes + 0);
+            gwDelivered0 = g_stats.deliveredViaGw.count(a.Get()) ? g_stats.deliveredViaGw[a.Get()] : 0;
+        }
+        if (numGateways > 1)
+        {
+            Ipv4Address b = wifiInterfaces.GetAddress(numManetNodes + 1);
+            gwDelivered1 = g_stats.deliveredViaGw.count(b.Get()) ? g_stats.deliveredViaGw[b.Get()] : 0;
+        }
+
+        std::ostringstream row;
+        row << "RESULT,"
+            << mode << ','
+            << numManetNodes << ','
+            << numGateways << ','
+            << numSources << ','
+            << areaSize << ','
+            << range << ','
+            << nodeSpeedMin << ','
+            << nodeSpeedMax << ','
+            << pauseTime << ','
+            << simTime << ','
+            << advIntervalSec << ','
+            << advZone << ','
+            << entryLifetimeSec << ','
+            << packetSize << ','
+            << cbrRatePps << ','
+            << RngSeedManager::GetRun() << ','
+            << attempted << ','
+            << g_stats.dataSent << ','
+            << g_stats.dataRelayed << ','
+            << g_stats.dataReceived << ','
+            << pdr << ','
+            << txPdr << ','
+            << sendRate << ','
+            << (avgDelay * 1000.0) << ','
+            << g_stats.noGatewayAtSendTime << ','
+            << g_stats.advSent << ','
+            << g_stats.advForwarded << ','
+            << g_stats.solSent << ','
+            << g_stats.solForwarded << ','
+            << g_stats.advReplies << ','
+            << g_stats.ControlOverhead() << ','
+            << gwDelivered0 << ','
+            << gwDelivered1 << ','
+            << (maliciousGw ? 1 : 0) << ','
+            << g_stats.dataDroppedByMalicious << ','
+            << areaHeight;
+        NS_LOG_UNCOND("");
+        NS_LOG_UNCOND(row.str());
     }
 
     Simulator::Destroy();

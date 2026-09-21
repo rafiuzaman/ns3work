@@ -1,0 +1,159 @@
+
+### Scenario 1: 15 nodes, 2 gateways, 800x500 m ###
+
+[S1] hybrid zone=1 seed=1                    PDR 95.7448%  ctrl   3577  (advFwd     0 / solFwd  2688)
+[S1] hybrid zone=1 seed=2                    PDR  94.93%  ctrl   3631  (advFwd     0 / solFwd  2734)
+[S1] hybrid zone=1 seed=3                    PDR 94.791%  ctrl   3929  (advFwd     0 / solFwd  2992)
+[S1] hybrid zone=1 seed=4                    PDR 95.0456%  ctrl   3410  (advFwd     0 / solFwd  2537)
+[S1] hybrid zone=1 seed=5                    PDR 95.3951%  ctrl   4252  (advFwd     0 / solFwd  3260)
+[S1] hybrid zone=2 seed=1                    PDR 96.926%  ctrl   2046  (advFwd  1208 / solFwd   406)
+[S1] hybrid zone=2 seed=2                    PDR 96.5633%  ctrl   2066  (advFwd  1144 / solFwd   473)
+[S1] hybrid zone=2 seed=3                    PDR 98.2547%  ctrl   2892  (advFwd  1118 / solFwd  1215)
+[S1] hybrid zone=2 seed=4                    PDR 97.7667%  ctrl   2043  (advFwd  1150 / solFwd   450)
+[S1] hybrid zone=2 seed=5                    PDR 98.1294%  ctrl   1869  (advFwd  1172 / solFwd   275)
+[S1] hybrid zone=3 seed=1                    PDR 98.6219%  ctrl   2920  (advFwd  2515 / solFwd    38)
+[S1] hybrid zone=3 seed=2                    PDR 98.1608%  ctrl   3069  (advFwd  2559 / solFwd   129)
+[S1] hybrid zone=3 seed=3                    PDR 98.6843%  ctrl   2945  (advFwd  2521 / solFwd    54)
+[S1] hybrid zone=3 seed=4                    PDR 98.4873%  ctrl   2967  (advFwd  2596 / solFwd     9)
+[S1] hybrid zone=3 seed=5                    PDR 99.0513%  ctrl   2947  (advFwd  2575 / solFwd    10)
+[S1] hybrid zone=4 seed=1                    PDR 98.5816%  ctrl   4116  (advFwd  3728 / solFwd    23)
+[S1] hybrid zone=4 seed=2                    PDR 97.3464%  ctrl   4234  (advFwd  3874 / solFwd     0)
+[S1] hybrid zone=4 seed=3                    PDR 98.7246%  ctrl   4178  (advFwd  3782 / solFwd    30)
+[S1] hybrid zone=4 seed=4                    PDR 99.3063%  ctrl   4063  (advFwd  3692 / solFwd     9)
+[S1] hybrid zone=4 seed=5                    PDR 99.0468%  ctrl   4175  (advFwd  3815 / solFwd     0)
+[S1] hybrid zone=5 seed=1                    PDR 98.6129%  ctrl   4957  (advFwd  4569 / solFwd    23)
+[S1] hybrid zone=5 seed=2                    PDR 97.9684%  ctrl   5130  (advFwd  4770 / solFwd     0)
+[S1] hybrid zone=5 seed=3                    PDR 98.7201%  ctrl   4933  (advFwd  4537 / solFwd    30)
+[S1] hybrid zone=5 seed=4                    PDR 99.4048%  ctrl   4930  (advFwd  4559 / solFwd     9)
+[S1] hybrid zone=5 seed=5                    PDR 98.9886%  ctrl   5065  (advFwd  4705 / solFwd     0)
+
+[S1] proactive (reference) seed=1            PDR 95.9596%  ctrl   5267  (advFwd  4907 / solFwd     0)
+[S1] proactive (reference) seed=2            PDR 97.9505%  ctrl   5510  (advFwd  5150 / solFwd     0)
+[S1] proactive (reference) seed=3            PDR 98.6978%  ctrl   5281  (advFwd  4921 / solFwd     0)
+[S1] proactive (reference) seed=4            PDR 90.0689%  ctrl   5066  (advFwd  4706 / solFwd     0)
+[S1] proactive (reference) seed=5            PDR 98.1697%  ctrl   5359  (advFwd  4999 / solFwd     0)
+[S1] reactive (reference) seed=1             PDR 95.6732%  ctrl   5421  (advFwd     0 / solFwd  4515)
+[S1] reactive (reference) seed=2             PDR 95.0329%  ctrl   5558  (advFwd     0 / solFwd  4626)
+[S1] reactive (reference) seed=3             PDR 96.0217%  ctrl   5375  (advFwd     0 / solFwd  4478)
+[S1] reactive (reference) seed=4             PDR 90.7537%  ctrl   5140  (advFwd     0 / solFwd  4282)
+[S1] reactive (reference) seed=5             PDR 89.1837%  ctrl   5392  (advFwd     0 / solFwd  4488)
+
+### Scenario 2: 25 nodes, 3 gateways, 1000x1000 m ###
+
+[S2] hybrid zone=1 seed=1                    PDR 88.4269%  ctrl  14690  (advFwd     0 / solFwd 11491)
+[S2] hybrid zone=1 seed=2                    PDR 89.4876%  ctrl  13730  (advFwd     0 / solFwd 10987)
+[S2] hybrid zone=1 seed=3                    PDR 82.6017%  ctrl  12643  (advFwd     0 / solFwd  9509)
+[S2] hybrid zone=1 seed=4                    PDR 87.5906%  ctrl   8911  (advFwd     0 / solFwd  6597)
+[S2] hybrid zone=1 seed=5                    PDR 85.6395%  ctrl  13371  (advFwd     0 / solFwd 10763)
+[S2] hybrid zone=2 seed=1                    PDR 95.5113%  ctrl   5060  (advFwd  2318 / solFwd  1509)
+[S2] hybrid zone=2 seed=2                    PDR 93.8823%  ctrl  10869  (advFwd  2435 / solFwd  6391)
+[S2] hybrid zone=2 seed=3                    PDR 90.124%  ctrl   7358  (advFwd  2010 / solFwd  3078)
+[S2] hybrid zone=2 seed=4                    
+### Scenario 1: 15 nodes, 2 gateways, 800x500 m ###
+
+[S1] hybrid zone=1 seed=1                    Resuming: 0 runs already on file in /home/rafi/ns3work-sync/zone-sweep.csv
+
+### Scenario 1: 15 nodes, 2 gateways, 800x500 m ###
+
+[S1] hybrid zone=1 seed=1                    PDR 95.7448%  ctrl   3577  (advFwd     0 / solFwd  2688)
+[S1] hybrid zone=1 seed=2                    PDR  94.93%  ctrl   3631  (advFwd     0 / solFwd  2734)
+[S1] hybrid zone=1 seed=3                    PDR 94.791%  ctrl   3929  (advFwd     0 / solFwd  2992)
+[S1] hybrid zone=1 seed=4                    PDR 95.0456%  ctrl   3410  (advFwd     0 / solFwd  2537)
+[S1] hybrid zone=1 seed=5                    PDR 95.3951%  ctrl   4252  (advFwd     0 / solFwd  3260)
+[S1] hybrid zone=2 seed=1                    PDR 96.926%  ctrl   2046  (advFwd  1208 / solFwd   406)
+[S1] hybrid zone=2 seed=2                    PDR 96.5633%  ctrl   2066  (advFwd  1144 / solFwd   473)
+[S1] hybrid zone=2 seed=3                    PDR 98.2547%  ctrl   2892  (advFwd  1118 / solFwd  1215)
+[S1] hybrid zone=2 seed=4                    PDR 97.7667%  ctrl   2043  (advFwd  1150 / solFwd   450)
+[S1] hybrid zone=2 seed=5                    PDR 98.1294%  ctrl   1869  (advFwd  1172 / solFwd   275)
+[S1] hybrid zone=3 seed=1                    PDR 98.6219%  ctrl   2920  (advFwd  2515 / solFwd    38)
+[S1] hybrid zone=3 seed=2                    PDR 98.1608%  ctrl   3069  (advFwd  2559 / solFwd   129)
+[S1] hybrid zone=3 seed=3                    PDR 98.6843%  ctrl   2945  (advFwd  2521 / solFwd    54)
+[S1] hybrid zone=3 seed=4                    PDR 98.4873%  ctrl   2967  (advFwd  2596 / solFwd     9)
+[S1] hybrid zone=3 seed=5                    PDR 99.0513%  ctrl   2947  (advFwd  2575 / solFwd    10)
+[S1] hybrid zone=4 seed=1                    PDR 98.5816%  ctrl   4116  (advFwd  3728 / solFwd    23)
+[S1] hybrid zone=4 seed=2                    PDR 97.3464%  ctrl   4234  (advFwd  3874 / solFwd     0)
+[S1] hybrid zone=4 seed=3                    PDR 98.7246%  ctrl   4178  (advFwd  3782 / solFwd    30)
+[S1] hybrid zone=4 seed=4                    PDR 99.3063%  ctrl   4063  (advFwd  3692 / solFwd     9)
+[S1] hybrid zone=4 seed=5                    PDR 99.0468%  ctrl   4175  (advFwd  3815 / solFwd     0)
+[S1] hybrid zone=5 seed=1                    PDR 98.6129%  ctrl   4957  (advFwd  4569 / solFwd    23)
+[S1] hybrid zone=5 seed=2                    PDR 97.9684%  ctrl   5130  (advFwd  4770 / solFwd     0)
+[S1] hybrid zone=5 seed=3                    PDR 98.7201%  ctrl   4933  (advFwd  4537 / solFwd    30)
+[S1] hybrid zone=5 seed=4                    PDR 99.4048%  ctrl   4930  (advFwd  4559 / solFwd     9)
+[S1] hybrid zone=5 seed=5                    PDR 98.9886%  ctrl   5065  (advFwd  4705 / solFwd     0)
+
+[S1] proactive (reference) seed=1            PDR 95.9596%  ctrl   5267  (advFwd  4907 / solFwd     0)
+[S1] proactive (reference) seed=2            PDR 97.9505%  ctrl   5510  (advFwd  5150 / solFwd     0)
+[S1] proactive (reference) seed=3            PDR 98.6978%  ctrl   5281  (advFwd  4921 / solFwd     0)
+[S1] proactive (reference) seed=4            PDR 90.0689%  ctrl   5066  (advFwd  4706 / solFwd     0)
+[S1] proactive (reference) seed=5            PDR 98.1697%  ctrl   5359  (advFwd  4999 / solFwd     0)
+[S1] reactive (reference) seed=1             PDR 95.6732%  ctrl   5421  (advFwd     0 / solFwd  4515)
+[S1] reactive (reference) seed=2             PDR 95.0329%  ctrl   5558  (advFwd     0 / solFwd  4626)
+[S1] reactive (reference) seed=3             PDR 96.0217%  ctrl   5375  (advFwd     0 / solFwd  4478)
+[S1] reactive (reference) seed=4             PDR 90.7537%  ctrl   5140  (advFwd     0 / solFwd  4282)
+[S1] reactive (reference) seed=5             PDR 89.1837%  ctrl   5392  (advFwd     0 / solFwd  4488)
+
+### Scenario 2: 25 nodes, 3 gateways, 1000x1000 m ###
+
+[S2] hybrid zone=1 seed=1                    PDR 88.4269%  ctrl  14690  (advFwd     0 / solFwd 11491)
+[S2] hybrid zone=1 seed=2                    PDR 89.4876%  ctrl  13730  (advFwd     0 / solFwd 10987)
+[S2] hybrid zone=1 seed=3                    PDR 82.6017%  ctrl  12643  (advFwd     0 / solFwd  9509)
+[S2] hybrid zone=1 seed=4                    PDR 87.5906%  ctrl   8911  (advFwd     0 / solFwd  6597)
+[S2] hybrid zone=1 seed=5                    PDR 85.6395%  ctrl  13371  (advFwd     0 / solFwd 10763)
+[S2] hybrid zone=2 seed=1                    PDR 95.5113%  ctrl   5060  (advFwd  2318 / solFwd  1509)
+[S2] hybrid zone=2 seed=2                    PDR 93.8823%  ctrl  10869  (advFwd  2435 / solFwd  6391)
+[S2] hybrid zone=2 seed=3                    PDR 90.124%  ctrl   7358  (advFwd  2010 / solFwd  3078)
+[S2] hybrid zone=2 seed=4                    PDR 91.7211%  ctrl   8113  (advFwd  2161 / solFwd  4023)
+[S2] hybrid zone=2 seed=5                    PDR 90.4099%  ctrl  13672  (advFwd  2203 / solFwd  9123)
+[S2] hybrid zone=3 seed=1                    PDR 95.6053%  ctrl   7323  (advFwd  5076 / solFwd  1081)
+[S2] hybrid zone=3 seed=2                    PDR 93.7928%  ctrl  10191  (advFwd  5295 / solFwd  3295)
+[S2] hybrid zone=3 seed=3                    PDR 89.8107%  ctrl   9114  (advFwd  4773 / solFwd  2212)
+[S2] hybrid zone=3 seed=4                    PDR 92.5624%  ctrl   9269  (advFwd  4619 / solFwd  2937)
+[S2] hybrid zone=3 seed=5                    PDR 87.4027%  ctrl  15061  (advFwd  4423 / solFwd  8406)
+[S2] hybrid zone=4 seed=1                    PDR 94.8713%  ctrl   9522  (advFwd  7461 / solFwd   922)
+[S2] hybrid zone=4 seed=2                    PDR 94.1956%  ctrl  12109  (advFwd  7271 / solFwd  3245)
+[S2] hybrid zone=4 seed=3                    PDR 89.5914%  ctrl  10923  (advFwd  6894 / solFwd  1988)
+[S2] hybrid zone=4 seed=4                    PDR 92.1597%  ctrl  11687  (advFwd  7092 / solFwd  2889)
+[S2] hybrid zone=4 seed=5                    PDR 90.5263%  ctrl  16309  (advFwd  6137 / solFwd  8009)
+[S2] hybrid zone=5 seed=1                    PDR 95.6858%  ctrl  10985  (advFwd  9005 / solFwd   852)
+[S2] hybrid zone=5 seed=2                    PDR 94.3656%  ctrl  13571  (advFwd  8733 / solFwd  3245)
+[S2] hybrid zone=5 seed=3                    PDR 89.936%  ctrl  12075  (advFwd  8142 / solFwd  1904)
+[S2] hybrid zone=5 seed=4                    PDR 92.3387%  ctrl  13618  (advFwd  9019 / solFwd  2891)
+[S2] hybrid zone=5 seed=5                    PDR 87.6846%  ctrl  17475  (advFwd  7306 / solFwd  8006)
+
+[S2] proactive (reference) seed=1            PDR 94.9161%  ctrl  11341  (advFwd 10801 / solFwd     0)
+[S2] proactive (reference) seed=2            PDR 92.2399%  ctrl  11151  (advFwd 10611 / solFwd     0)
+[S2] proactive (reference) seed=3            PDR 90.8802%  ctrl  10237  (advFwd  9697 / solFwd     0)
+[S2] proactive (reference) seed=4            PDR 92.4416%  ctrl  11566  (advFwd 11026 / solFwd     0)
+[S2] proactive (reference) seed=5            PDR 90.9425%  ctrl   9240  (advFwd  8700 / solFwd     0)
+[S2] reactive (reference) seed=1             PDR 91.7297%  ctrl   9217  (advFwd     0 / solFwd  7479)
+[S2] reactive (reference) seed=2             PDR 88.2121%  ctrl  16143  (advFwd     0 / solFwd 13449)
+[S2] reactive (reference) seed=3             PDR 86.8662%  ctrl  11017  (advFwd     0 / solFwd  8470)
+[S2] reactive (reference) seed=4             PDR 88.5617%  ctrl  12203  (advFwd     0 / solFwd  9840)
+[S2] reactive (reference) seed=5             PDR 85.4381%  ctrl  18013  (advFwd     0 / solFwd 15241)
+
+Wrote /home/rafi/ns3work-sync/zone-sweep.csv  (70 run this time, 0 already on file)
+
+Hybrid against zone radius, with the two reference mechanisms:
+ nodes mode         zone      PDR%   gwAvail%    control     advFwd     solFwd  seeds
+    15 hybrid          1     95.18      99.12     3759.8        0.0     2842.2      5
+    15 hybrid          2     97.53      99.81     2183.2     1158.4      563.8      5
+    15 hybrid          3     98.60      99.98     2969.6     2553.2       48.0      5
+    15 hybrid          4     98.60     100.00     4153.2     3778.2       12.4      5
+    15 hybrid          5     98.74     100.00     5003.0     4628.0       12.4      5
+    15 proactive       -     96.17     100.00     5296.6     4936.6        0.0      5
+    15 reactive        -     93.33      98.58     5377.2        0.0     4477.8      5
+    25 hybrid          1     86.75      92.88    12669.0        0.0     9869.4      5
+    25 hybrid          2     92.33      94.33     9014.4     2225.4     4824.8      5
+    25 hybrid          3     91.83      94.66    10191.6     4837.2     3586.2      5
+    25 hybrid          4     92.27      94.79    12110.0     6971.0     3410.6      5
+    25 hybrid          5     92.00      94.79    13544.8     8441.0     3379.6      5
+    25 proactive       -     92.28      94.61    10707.0    10167.0        0.0      5
+    25 reactive        -     88.16      92.88    13318.6        0.0    10895.8      5
+
+Read the advFwd / solFwd columns together: as the zone shrinks, the
+mechanism should shift from advertisement-driven to solicitation-driven.
+If the total control overhead rises to meet the reactive reference as the
+zone approaches one hop, the hybrid advantage is a function of the zone
+covering the network, and the paper must say so.
+
+To share: cd ~/ns3work-sync && git add zone-sweep.csv && git commit -m 'Zone radius sweep' && git push
