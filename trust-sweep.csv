@@ -1,0 +1,2 @@
+mode,nodes,gateways,sources,area,range,speedMin,speedMax,pause,simTime,advInterval,advZone,entryLifetime,packetSize,cbrRate,seed,offered,sent,relayed,received,pdr,txPdr,gwAvail,delay_ms,noGateway,advSent,advFwd,solSent,solFwd,replies,control,gw0,gw1,malicious,droppedByMalicious,areaHeight,numMaliciousGw,dropFraction,trustAware,trustThreshold,dataViaMalicious,acksSent,acksDelivered
+hybrid,15,2,5,800,250,3,3,60,900,5,3,15,512,5,1,22349,22346,9980,9980,44.6552,44.6612,99.9866,4.69211,3,360,2516,3,38,4,2921,9980,0,1,11830,500,1,1,0,0.5,12098,0,0

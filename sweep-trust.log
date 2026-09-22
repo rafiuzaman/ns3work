@@ -1,0 +1,8 @@
+nohup: ignoring input
+Resuming: 0 runs already on file
+
+##### Scenario 1: 15 nodes, 2 gateways #####
+
+--- A. does it work: full dropper, baseline vs trust-aware ---
+[S1] trust=false drop=1.0 seed=1                     PDR 44.6552%   entrusted to attacker  12098/22346
+[S1] trust=false drop=1.0 seed=2                     

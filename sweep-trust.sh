@@ -85,7 +85,7 @@ run_one () {
     local f="$SCRATCH/run_${N}_${nmal}_${drop}_${trust}_${thr}_${seed}.txt"
     printf "%-52s " "$label"
 
-    ./ns3 run "scratch/gateway-trust \
+    ./ns3 run "scratch/gateway-trust-v8 \
                --mode=$MODE \
                --numManetNodes=$N --numGateways=$G --numSources=$SOURCES \
                --areaSize=$A --areaHeight=$AH --range=$RANGE \
@@ -96,6 +96,7 @@ run_one () {
                --packetSize=$PKTSIZE --cbrRate=$CBRRATE \
                --maliciousGw=true --numMaliciousGw=$nmal --dropFraction=$drop \
                --trustAware=$trust --trustThreshold=$thr \
+               --trustBeta=0.50 --trustMinSample=10 \
                --RngRun=$seed" > "$f" 2>&1
 
     if grep -q "^RESULT," "$f"; then
