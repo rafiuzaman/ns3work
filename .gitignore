@@ -1,3 +1,6 @@
 ns2/**/traces/
 *.tr
 *.tr.pos
+.rand_state
+ns2/rerun/logs/
+ns2/rerun/results/*.lock
