@@ -53,6 +53,13 @@
 #include <string>
 #include <vector>
 
+#ifndef NS3_LOG_ENABLE
+#undef NS_LOG_UNCOND
+#define NS_LOG_UNCOND(msg) \
+    do { std::cout << msg << std::endl; } while (false)
+#endif
+
+
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("GatewayDiscovery");
