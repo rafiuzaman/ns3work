@@ -36,7 +36,7 @@ EVOUT=${EVOUT:-results/events.csv}
 TSTART=20
 TSTOP=1000
 
-mkdir -p traces results logs "$(dirname "$OUT")"
+mkdir -p traces results logs pos "$(dirname "$OUT")"
 
 HEADER="proto,model,nodes,seed,rate_kb,vmin,vmax,pause,sent,recv,pdr,delay,thr_kbps,ctrl,ctrl_bytes,nrl,ctrl_per_node_s,rreq,rrep,rerr,link_fail,lbr,pst,pst_n,pst_censored_n,pst_incl_censored"
 [ -f "$OUT" ] || echo "$HEADER" > "$OUT"
@@ -73,8 +73,11 @@ run_one() {
         rm -f "$tmp"
     fi
 
+    # node positions are small: always keep them (gzipped) for the
+    # geometric link-break analysis; traces are only kept with KEEP=1
+    gzip -c "$tr.pos" > "pos/$tag.pos.gz"
     if [ "$KEEP" = "1" ]; then
-        awk -f check_movement.awk "$tr.pos" > "logs/$tag.movement"
+        awk -f check_movement.awk "$tr.pos" > "logs/$tag.movement" 2>&1
     else
         rm -f "$tr" "$tr.pos"
     fi
@@ -83,10 +86,12 @@ run_one() {
 export -f run_one
 export OUT EVOUT EVENTS KEEP PAUSE TSTART TSTOP
 
-# build the job list, then run JOBS at a time
+# build the job list, then run JOBS at a time.
+# Seed is the OUTER loop: the whole grid is done for seed 1, then seed 2, ...
+# so a campaign stopped early still has complete grids with fewer seeds.
 JOBLIST=$(mktemp)
-for proto in $PROTOS; do for model in $MODELS; do for nodes in $NODES; do
-for rate in $RATES; do for speed in $SPEEDS; do for seed in $SEEDS; do
+for seed in $SEEDS; do for proto in $PROTOS; do for model in $MODELS; do
+for nodes in $NODES; do for rate in $RATES; do for speed in $SPEEDS; do
     echo "$proto $model $nodes $seed $rate $speed"
 done; done; done; done; done; done > "$JOBLIST"
 

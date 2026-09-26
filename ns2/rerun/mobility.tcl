@@ -8,7 +8,7 @@
 #   model   : RWP | RD | GM
 #   rate_kb : per-flow CBR rate in kbps (e.g. 64 or 128)
 #   vmin/vmax : node speed range in m/s
-#   pause   : pause time in s (RWP and RD; ignored by GM)
+#   pause   : pause time in s (RWP only; RD and GM do not pause, as in the original scripts)
 #
 # Example:
 #   ns mobility.tcl AODV GM 50 1 64 1 20 0 traces/AODV_GM_50_s1.tr
@@ -60,9 +60,9 @@ set margin      1.0      ;# keep waypoints inside the area
 set val(ifq)    Queue/DropTail/PriQueue
 
 # Radio: stated explicitly so the paper can report them (reviewer request).
-# ns-2.35 defaults are 1 Mb for both; 2 Mb data rate is the classic CMU setup.
+# 1 Mb/s = the ns-2.35 default, which the original Paper 1 runs used.
 # Default Phy/WirelessPhy thresholds with TwoRayGround give a 250 m range.
-Mac/802_11 set dataRate_  2Mb
+Mac/802_11 set dataRate_  1Mb
 Mac/802_11 set basicRate_ 1Mb
 
 # ---------------- Randomness ----------------
@@ -156,8 +156,8 @@ for {set i 0} {$i < $val(nn)} {incr i} {
         }
 
     } elseif {$model == "RD"} {
-        # Random Direction (Royer et al.): pick a direction, travel to the
-        # boundary, pause, pick a new direction
+        # Random Direction: pick a direction, travel to the boundary,
+        # pick a new direction (no pause, as in the original scripts)
         while {$t < $val(stop)} {
             set th  [U 0 [expr 2 * $PI]]
             set d   [dist_to_edge $px($i) $py($i) $th]
@@ -166,7 +166,7 @@ for {set i 0} {$i < $val(nn)} {incr i} {
             set ny  [expr $py($i) + $d * sin($th)]
             set spd [U $vmin $vmax]
             move $i $t $nx $ny $spd
-            set t [expr $t + $d / $spd + $pause]
+            set t [expr $t + $d / $spd]
         }
 
     } elseif {$model == "GM"} {

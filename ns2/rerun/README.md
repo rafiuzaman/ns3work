@@ -28,13 +28,16 @@ The original scripts are kept unchanged in `../old/` for comparison.
    as censored.
 6. **Seeds did not control movement.** Tcl's `rand()` is not seeded by
    `ns-random`. All randomness now comes from one seeded RNG.
-7. **Radio settings unstated.** Now explicit: 802.11 data rate 2 Mb/s, basic
-   rate 1 Mb/s, TwoRayGround, 250 m range.
+7. **Radio settings unstated.** Now explicit: 802.11 data and basic rate 1 Mb/s
+   (the ns-2.35 default the original runs used), TwoRayGround, 250 m range.
+
+Kept from the original on purpose: 5 CBR flows, 512-byte packets, 600 x 400 m,
+1000 s, RWP pause 100 s (pass `PAUSE=100`), RD and GM without pauses.
 
 ## First: validate (about 5 minutes)
 
 ```bash
-cd ~/ns3work-sync/ns2/rerun
+cd ~/ns2work/rerun
 chmod +x run.sh
 SEEDS="1" NODES="50" RATES="64" OUT=results/validate.csv KEEP=1 ./run.sh
 cat results/validate.csv
