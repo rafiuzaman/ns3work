@@ -81,8 +81,13 @@ $1 == "s" && $4 == "RTR" && ($7 == "AODV" || $7 == "message" || $7 == "OLSR") {
 
 # ---------------- link failures (MAC callback drops) ----------------
 $1 == "D" && $4 == "RTR" && $5 == "CBK" {
-    link = $3 "-" $10          # node and next-hop MAC address
-    if (!(link in lastf) || $2 - lastf[link] > 1.0) lfail++
+    link = $3 "-" $10          # node and next-hop MAC address (hex)
+    if (!(link in lastf) || $2 - lastf[link] > 1.0) {
+        lfail++
+        # side file for linkbreaks.py: time, node, next hop (hex MAC)
+        if (cbkfile == "") { cbkfile = FILENAME; sub(/^traces\//, "pos/", cbkfile); cbkfile = cbkfile ".cbk" }
+        print $2, node_of($3), $10 > cbkfile
+    }
     lastf[link] = $2
     next
 }
