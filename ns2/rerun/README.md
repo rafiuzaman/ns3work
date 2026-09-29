@@ -11,6 +11,7 @@ The original scripts are kept unchanged in `../old/` for comparison.
 | `run.sh` | Runs a grid of experiments, resumable, optionally in parallel |
 | `summarize.awk` | Mean, SD and 95 % CI across seeds |
 | `check_movement.awk` | Confirms nodes actually move |
+| `linkbreaks.py` | True (geometric) link breaks from `pos/`, and true vs false MAC link failures |
 
 ## What was wrong in the old scripts
 
@@ -78,3 +79,16 @@ awk -F, -f summarize.awk results/paperA.csv > results/paperA_summary.csv
 ```
 
 After each batch: `git add results && git commit -m "..." && git push`.
+
+## True vs false link breaks (Paper A)
+
+`metrics.awk` writes every counted MAC link failure to `pos/<run>.tr.cbk`
+(time, node, next-hop MAC in hex). `linkbreaks.py` replays the node movement
+from `pos/<run>.pos.gz` and checks, for each failure, whether the next hop was
+really out of range (true break) or still within 250 m (false break caused by
+collisions/retries). It also counts all geometric link breaks and the mean
+node degree, for every run, including runs made before the `.cbk` files existed.
+
+```bash
+python3 linkbreaks.py pos/*.pos.gz > results/linkbreaks.csv
+```
