@@ -53,7 +53,7 @@ run_one() {
     local tag="${proto}_${model}_${nodes}n_s${seed}_${rate}kb_v${speed}_p${PAUSE}"
     local tr="traces/$tag.tr"
 
-    if ! ns mobility.tcl "$proto" "$model" "$nodes" "$seed" "$rate" "$vmin" "$vmax" "$PAUSE" "$tr" \
+    if ! timeout ${TMAX:-2400} ns mobility.tcl "$proto" "$model" "$nodes" "$seed" "$rate" "$vmin" "$vmax" "$PAUSE" "$tr" \
             > "logs/$tag.log" 2>&1 || [ ! -s "$tr" ]; then
         echo "FAILED $tag (see logs/$tag.log)"
         echo "$tag" >> results/failed.txt
