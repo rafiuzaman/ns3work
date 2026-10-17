@@ -15,8 +15,8 @@
 # is started again. JOBS (default 1) = simulations in parallel; use 1 on a 1-2 core VM.
 #
 # Scenarios:
-#   S1  15 nodes,  800 x 500 m,  2 gateways,  5 sources
-#   S2  25 nodes, 1000 x 1000 m, 3 gateways,  5 sources
+#   S1  20 nodes, 1000 x 600 m,  2 gateways,  5 sources
+#   S2  40 nodes, 1200 x 1000 m, 3 gateways,  8 sources
 #   S3  50 nodes, 1300 x 1000 m, 4 gateways, 10 sources
 #   S4 100 nodes, 2000 x 1300 m, 6 gateways, 20 sources
 #
@@ -28,8 +28,8 @@
 #   fuzzy-T                                 interval only (adaptMode 1), k 3
 #   fuzzy-k                                 zone only (adaptMode 2), T 5
 #   fuzzy-kT                                joint, proposed (adaptMode 3), k0 3, T0 5
-# Speeds 1, 3 and 6 m/s for S1 and S2; 3 m/s for S3 and S4. Seeds 1-5. 900 s.
-# 'calib': S1 and S2 at 3 m/s, seeds 1-5: hybrid zones 1-5 (T 5) and proactive at T 2, 5, 10.
+# Speeds 1, 3 and 6 m/s for S1 and S2; 3 m/s for S3 and S4. Seeds 11-15 (RngRun). 900 s.
+# 'calib': S1 and S2 at 3 m/s, seeds 11-15: hybrid zones 1-5 (T 5) and proactive at T 2, 5, 10.
 
 set -u
 
@@ -55,6 +55,8 @@ FZ=""; FZTAG=""
 if [ -f "$HERE/fz-params.txt" ]; then
     FZTAG=$(sed -n 1p "$HERE/fz-params.txt"); FZ=$(sed -n 2p "$HERE/fz-params.txt")
 fi
+FZARGS="--fzTag=default"
+[ -n "$FZ" ] && FZARGS="--fz=$FZ --fzTag=$FZTAG"
 
 HEADER="mode,nodes,gateways,sources,area,range,speedMin,speedMax,pause,simTime,advInterval,advZone,entryLifetime,packetSize,cbrRate,seed,offered,sent,relayed,received,pdr,txPdr,gwAvail,delay_ms,noGateway,advSent,advFwd,solSent,solFwd,replies,control,gw0,gw1,malicious,droppedByMalicious,areaHeight,adaptMode,fzTag,meanK,meanT,epochs,kChanges,ctrlEpoch,config"
 
@@ -65,8 +67,8 @@ echo "Building..."
 
 scen () {   # sets N G A AH SRC for scenario $1
     case "$1" in
-        1) N=15;  G=2; A=800;  AH=500;  SRC=5 ;;
-        2) N=25;  G=3; A=1000; AH=1000; SRC=5 ;;
+        1) N=20;  G=2; A=1000; AH=600;  SRC=5 ;;
+        2) N=40;  G=3; A=1200; AH=1000; SRC=8 ;;
         3) N=50;  G=4; A=1300; AH=1000; SRC=10 ;;
         4) N=100; G=6; A=2000; AH=1300; SRC=20 ;;
     esac
@@ -90,9 +92,9 @@ run_args () {   # $1 scenario, $2 config, $3 speed, $4 seed, $5 simtime -> print
         pro-T5)       echo "--mode=proactive --advInterval=5 --advZone=3 $base" ;;
         pro-T10)      echo "--mode=proactive --advInterval=10 --advZone=3 $base" ;;
         msc)          echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=4 --fzTag=msc $base" ;;
-        fuzzy-T)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=1 --fz=$FZ --fzTag=$FZTAG $base" ;;
-        fuzzy-k)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=2 --fz=$FZ --fzTag=$FZTAG $base" ;;
-        fuzzy-kT)     echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=3 --fz=$FZ --fzTag=$FZTAG $base" ;;
+        fuzzy-T)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=1 $FZARGS $base" ;;
+        fuzzy-k)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=2 $FZARGS $base" ;;
+        fuzzy-kT)     echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=3 $FZARGS $base" ;;
         *) echo "unknown config $2" >&2; return 1 ;;
     esac
 }
@@ -110,7 +112,7 @@ fi
 if [ "$WHAT" = "smoke" ]; then
     for cfg in msc fuzzy-T fuzzy-k fuzzy-kT; do
         echo "### $cfg"
-        ./ns3 run --no-build "scratch/$PROG $(run_args 2 $cfg 3 1 240) --trace=1" | grep -E "^EPOCH|^Adaptive|^RESULT"
+        ./ns3 run --no-build "scratch/$PROG $(run_args 2 $cfg 3 11 240) --trace=1" | grep -E "^EPOCH|^Adaptive|^RESULT"
     done
     echo "EPOCH columns: time, gateway, sources, solicitations, SR, SRin, h90, hmax, M, dk, k, T"
     exit 0
@@ -119,20 +121,20 @@ fi
 # ---------------------------------------------------------------- job lists
 JOBLIST="$SCRATCH/jobs.txt"; : > "$JOBLIST"
 if [ "$WHAT" = "calib" ]; then
-    OUT="$OUTDIR/p4-calib.csv"
-    for seed in $(seq 1 "$SEEDS"); do for sc in 1 2; do
+    OUT="$OUTDIR/p4-calib2.csv"
+    for seed in $(seq 11 $((10 + SEEDS))); do for sc in 1 2; do
         for cfg in fixed-k1-T5 fixed-k2-T5 fixed-k3-T5 fixed-k4-T5 fixed-k5-T5 pro-T2 pro-T5 pro-T10; do
             echo "$sc $cfg 3 $seed" >> "$JOBLIST"; done; done; done
 elif [ "$WHAT" = "large" ]; then
     OUT="$OUTDIR/p4-large.csv"
-    for sc in 3 4; do for seed in $(seq 1 3); do
+    for sc in 3 4; do for seed in $(seq 11 13); do
         for cfg in fixed-k1-T5 fixed-k2-T5 fixed-k3-T5 fixed-k4-T5 fixed-k5-T5 proactive reactive; do
             echo "$sc $cfg 3 $seed" >> "$JOBLIST"; done; done; done
 elif [ "$WHAT" = "eval" ]; then
     [ -n "$FZ" ] || { echo "paper4/fz-params.txt is missing: run 'calib', push the results, and wait for the GA parameters"; exit 1; }
     OUT="$OUTDIR/p4-eval.csv"
     CFGS="fuzzy-kT fixed-k2-T5 fixed-k3-T5 fixed-k2-T14 msc fuzzy-T fuzzy-k proactive reactive"
-    for seed in $(seq 1 "$SEEDS"); do
+    for seed in $(seq 11 $((10 + SEEDS))); do
         for sc in 1 2; do for v in 1 3 6; do for cfg in $CFGS; do echo "$sc $cfg $v $seed" >> "$JOBLIST"; done; done; done
         for sc in 3 4; do for cfg in $CFGS; do echo "$sc $cfg 3 $seed" >> "$JOBLIST"; done; done
     done

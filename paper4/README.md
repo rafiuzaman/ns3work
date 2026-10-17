@@ -2,6 +2,9 @@
 
 Branch `paper4`. Everything for Paper4 lives in this folder; nothing here depends on other papers' result files.
 
+Scenarios (17 Oct): S1 20 nodes 1000x600 m 2 GW 5 sources; S2 40 nodes 1200x1000 m 3 GW 8 sources; S3 50 nodes; S4 100 nodes; seeds 11–15.
+(The first calibration, p4-calib.csv, used the 15/25-node set-ups and is not used.)
+
 ## Files
 - `p4-adaptive-gw.cc` — ns-3.48 program: proactive / reactive / hybrid gateway discovery with optional adaptive control at each
   gateway of the advertisement zone k and interval T (`--adaptMode` 0 off, 1 interval, 2 zone, 3 joint = proposed, 4 maximal
@@ -16,9 +19,9 @@ First time:
 (If ns-3.48 is not at ~/ns-allinone-3.48/ns-3.48:  export NS3DIR=/path/to/ns-3.48)
 
 0. Build check (one run):          ./paper4/sweep-p4.sh check     -> must print 96.4741,3294
-1. STAGE 1 — calibration (80 runs, 15/25 nodes, about 20–30 min):
+1. STAGE 1 — calibration (80 runs, 20/40 nodes, seeds 11–15, about 40–60 min):
        nohup ./paper4/sweep-p4.sh calib 1 > ~/p4-calib.log 2>&1 &
-   then push:  git add paper4/results/p4-calib.csv && git commit -m "Paper4 calib" && git push origin paper4
+   then push:  git add paper4/results/p4-calib2.csv && git commit -m "Paper4 calib2" && git push origin paper4
 2. STAGE 2 — Claude fits the cost model from p4-calib.csv, runs the GA and pushes paper4/fz-params.txt.
 3. STAGE 3 — evaluation (360 runs; overnight, the 100-node runs take ~10 min each):
        git pull
