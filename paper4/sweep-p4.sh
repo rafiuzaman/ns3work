@@ -55,6 +55,8 @@ FZ=""; FZTAG=""
 if [ -f "$HERE/fz-params.txt" ]; then
     FZTAG=$(sed -n 1p "$HERE/fz-params.txt"); FZ=$(sed -n 2p "$HERE/fz-params.txt")
 fi
+FZARGS="--fzTag=default"
+[ -n "$FZ" ] && FZARGS="--fz=$FZ --fzTag=$FZTAG"
 
 HEADER="mode,nodes,gateways,sources,area,range,speedMin,speedMax,pause,simTime,advInterval,advZone,entryLifetime,packetSize,cbrRate,seed,offered,sent,relayed,received,pdr,txPdr,gwAvail,delay_ms,noGateway,advSent,advFwd,solSent,solFwd,replies,control,gw0,gw1,malicious,droppedByMalicious,areaHeight,adaptMode,fzTag,meanK,meanT,epochs,kChanges,ctrlEpoch,config"
 
@@ -90,9 +92,9 @@ run_args () {   # $1 scenario, $2 config, $3 speed, $4 seed, $5 simtime -> print
         pro-T5)       echo "--mode=proactive --advInterval=5 --advZone=3 $base" ;;
         pro-T10)      echo "--mode=proactive --advInterval=10 --advZone=3 $base" ;;
         msc)          echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=4 --fzTag=msc $base" ;;
-        fuzzy-T)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=1 --fz=$FZ --fzTag=$FZTAG $base" ;;
-        fuzzy-k)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=2 --fz=$FZ --fzTag=$FZTAG $base" ;;
-        fuzzy-kT)     echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=3 --fz=$FZ --fzTag=$FZTAG $base" ;;
+        fuzzy-T)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=1 $FZARGS $base" ;;
+        fuzzy-k)      echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=2 $FZARGS $base" ;;
+        fuzzy-kT)     echo "--mode=hybrid --advInterval=5 --advZone=3 --adaptMode=3 $FZARGS $base" ;;
         *) echo "unknown config $2" >&2; return 1 ;;
     esac
 }
